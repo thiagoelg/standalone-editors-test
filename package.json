@@ -1,0 +1,23 @@
+{
+  "name": "standalone-editors",
+  "version": "1.0.0",
+  "description": "",
+  "private": true,
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "webpack",
+    "start": "webpack serve"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "webpack": "^5.94.0",
+    "webpack-cli": "^5.1.4",
+    "webpack-dev-server": "^5.0.4"
+  },
+  "dependencies": {
+    "@ibm/bamoe-standalone-bpmn-and-dmn-editors-classic": "file:../kie-editors-standalone",
+    "@ibm/bamoe-standalone-dmn-editor": "file:../dmn-editor-standalone",
+    "lodash": "^4.17.21"
+  }
+}
