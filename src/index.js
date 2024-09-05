@@ -18,6 +18,12 @@ document.addEventListener("DOMContentLoaded", function(event) {
     document.getElementById("new-dmn-editor-container").setAttribute("class", "container hidden");
   }
 
+  let readOnly = false;
+
+  document.getElementById("toggle-readonly").onclick = () => {
+    readOnly = !readOnly;
+  }
+
   document.getElementById("load-classic-bpmn-editor").onclick = () => {
     closeEditors();
 
@@ -25,7 +31,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
     classicBpmnEditor = BpmnEditor.open({
       container: document.getElementById("classic-bpmn-editor-container"),
       initialContent: Promise.resolve(""),
-      readOnly: false
+      readOnly: readOnly
     });
   };
 
@@ -36,7 +42,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
     classicDmnEditor = DmnEditor.open({
       container: document.getElementById("classic-dmn-editor-container"),
       initialContent: Promise.resolve(""),
-      readOnly: false
+      readOnly: readOnly
     });
   }
 
@@ -47,7 +53,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
     newDmnEditor = NewDmnEditor.open({
       container: document.getElementById("new-dmn-editor-container"),
       initialContent: Promise.resolve(""),
-      readOnly: false
+      readOnly: readOnly
     });
   }
 });
