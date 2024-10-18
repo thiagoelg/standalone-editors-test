@@ -27,17 +27,24 @@
         margin: 0;
       }
 
+      body {
+        display: flex;
+      }
+
       #dmn-editor-container {
-        height: calc(100vh - 36px);
+        height: 100vh;
+        width: 100%;
+        border: 1px solid black;
       }
 
       .toolbar {
-        height: 30px;
+        width: 250px;
         display: flex;
         font-size: 16px;
         border-bottom: 1px solid #d2d2d2;
         box-sizing: border-box;
         align-items: center;
+        flex-direction: column;
       }
 
       .toolbar button {
@@ -45,15 +52,40 @@
       }
 
       .toolbar .toolbar-items {
+        display: flex;
         flex: 1 1;
+        flex-direction: column;
+        width: 100%;
+        text-align: center;
       }
 
       .toolbar .load-files {
-        text-align: right;
+        place-content: flex-end;
+      }
+
+      .toolbar .upload-file {
+        flex: 0 0;
       }
 
       .hidden {
         display: none;
+      }
+
+      input[type="file"] {
+        display: none;
+      }
+
+      .btn {
+        cursor: pointer;
+        border: 2px solid #000000;
+        padding: 0.4em 0.4em;
+        border-radius: 0.1em;
+        background-color: #ebebeb;
+        font-family: Arial;
+      }
+
+      .btn:hover {
+        background-color: #c7c7c7;
       }
     </style>
 
@@ -66,19 +98,26 @@
   <body>
     <div class="toolbar">
       <div class="toolbar-items actions">
-        <button id="undo">Undo</button>
-        <button id="redo">Redo</button>
-        <button id="download">Download</button>
-        <button id="downloadSvg">Download SVG</button>
+        <button class="btn" id="undo">Undo</button>
+        <button class="btn" id="redo">Redo</button>
+        <button class="btn" id="download">Download</button>
+        <button class="btn" id="downloadSvg">Download SVG</button>
         <span id="unsavedChanges" class="hidden">File contains unsaved changes.</span>
+      </div>
+      <br />
+      <div class="toolbar-items upload-file">
+        <label for="fileUpload" class="btn">
+          Upload DMN
+        </label>
+        <input type="file" id="fileUpload" accept=".dmn,.DMN"/>
       </div>
       <br />
       <div class="toolbar-items load-files">
         Load DMN:
-        <button id="empty.dmn">Empty</button>
-        <button id="empty-drd.dmn">Empty DRD</button>
-        <button id="find-employees.dmn">Find Employees</button>
-        <button id="loan-pre-qualification.dmn">Loan Pre Qualification</button>
+        <button class="btn" id="empty.dmn">Empty</button>
+        <button class="btn" id="empty-drd.dmn">Empty DRD</button>
+        <button class="btn" id="find-employees.dmn">Find Employees</button>
+        <button class="btn" id="loan-pre-qualification.dmn">Loan Pre Qualification</button>
       </div>
     </div>
     <div id="dmn-editor-container" />

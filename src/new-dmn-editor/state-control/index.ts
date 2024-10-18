@@ -20,6 +20,10 @@
 import * as DmnEditor from "@ibm/bamoe-standalone-dmn-editor/dist";
 import { initFileLoader } from "../../fileLoader";
 
+declare global {
+  interface Window { editor: DmnEditor.DmnEditorStandaloneApi; }
+}
+
 document.addEventListener("DOMContentLoaded", function () {
   loadEditor();
 });
@@ -28,7 +32,7 @@ function loadEditor() {
   // Loads the DMN Editor in the `<div id="dmn-editor-container" />` element.
   // Initializes with an empty file called `newModel.dmn` on the root of the
   // workspace.
-  const editor = DmnEditor.open({
+  window.editor = DmnEditor.open({
     container: document.getElementById("dmn-editor-container")!,
     initialFileNormalizedPosixPathRelativeToTheWorkspaceRoot: "newModel.dmn",
     initialContent: Promise.resolve(``),
@@ -38,13 +42,13 @@ function loadEditor() {
   // Undo button: Calls the `undo` method from the Editor API.
   // Will undo the last action (moving a node, renaming a node, adding an edge, etc).
   document.getElementById("undo")?.addEventListener("click", () => {
-    editor.undo();
+    window.editor.undo();
   });
 
   // Undo button: Calls the `redo` method from the Editor API.
   // Useful after an undo, will redo the last action undone action.
   document.getElementById("redo")?.addEventListener("click", () => {
-    editor.redo();
+    window.editor.redo();
   });
 
   // Download button: Calls the `getContent` method from the Editor API
@@ -52,14 +56,14 @@ function loadEditor() {
   // of the underlying XML for the current Decision.
   // In the end, marks the content as saved via `markAsSaved`.
   document.getElementById("download")?.addEventListener("click", () => {
-    editor.getContent().then((content) => {
+    window.editor.getContent().then((content) => {
       const elem = window.document.createElement("a");
       elem.href = "data:text/plain;charset=utf-8," + encodeURIComponent(content);
       elem.download = "model.dmn";
       document.body.appendChild(elem);
       elem.click();
       document.body.removeChild(elem);
-      editor.markAsSaved();
+      window.editor.markAsSaved();
     });
   });
 
@@ -67,7 +71,7 @@ function loadEditor() {
   // and then starts a download of a .svg file with the diagram generated
   // for the current Decision.
   document.getElementById("downloadSvg")?.addEventListener("click", () => {
-    editor.getPreview().then((svgContent) => {
+    window.editor.getPreview().then((svgContent) => {
       if (!svgContent) {
         return;
       }
@@ -82,7 +86,7 @@ function loadEditor() {
 
   // Listens to the `contentChange` notification.
   // Useful for checking if a model has changed and needs to be saved, for example.
-  editor.subscribeToContentChanges((isDirty) => {
+  window.editor.subscribeToContentChanges((isDirty) => {
     if (isDirty) {
       document.getElementById("unsavedChanges")?.classList.remove("hidden");
     } else {
@@ -90,7 +94,25 @@ function loadEditor() {
     }
   });
 
-  initFileLoader(["empty.dmn", "empty-drd.dmn", "find-employees.dmn", "loan-pre-qualification.dmn"], editor);
+  initFileLoader(["empty.dmn", "empty-drd.dmn", "find-employees.dmn", "loan-pre-qualification.dmn"], window.editor);
 
-  console.log({ editor });
+
+  // File upload
+  const uploadButton = document.getElementById("fileUpload");
+
+  uploadButton?.addEventListener("change", (fileUploadEvent) => {
+    let reader;
+    const files = (fileUploadEvent.target as HTMLInputElement).files;
+    if (files && files[0]) {
+      reader = new FileReader();
+      reader.onload = (fileReadEvent) => {
+        if (typeof fileReadEvent.target?.result === "string") {
+          window.editor.setContent(files[0].name, fileReadEvent.target.result);
+        }
+      };
+      reader.readAsText(files[0]);
+    }
+  });
+
+  console.log({ editor: window.editor });
 }

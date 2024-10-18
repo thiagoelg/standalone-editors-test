@@ -17,8 +17,8 @@
     "start": "webpack serve --host 0.0.0.0 --env dev"
   },
   "dependencies": {
-    "@ibm/bamoe-standalone-bpmn-and-dmn-editors-classic": "9.1.1-ibm-0002",
-    "@ibm/bamoe-standalone-dmn-editor": "9.1.1-ibm-0002"
+    "@ibm/bamoe-standalone-bpmn-and-dmn-editors-classic": "9.1.1-ibm-0003",
+    "@ibm/bamoe-standalone-dmn-editor": "9.1.1-ibm-0003"
   },
   "devDependencies": {
     "copy-webpack-plugin": "^11.0.0",
